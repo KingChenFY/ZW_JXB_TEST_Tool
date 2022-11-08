@@ -326,11 +326,27 @@ typedef enum
     EnumBoardId_END  //
 }emBoardCmdId;
 
+typedef enum
+{
+    emPrintfCmdId_START = 0,
+
+    /* 请求： */
+    /* 返回：eAimAction(U32 emNetPrintfEnableBYTE) + eCurAction(U32 emNetPrintfEnableBYTE) */
+    emPrintfCmdId_SwitchPrintfAction = 1,//切换要打印的模块
+
+    /* 请求： */
+    /* 返回： */
+    emPrintfCmdId_RefreshPrint = 2,//查询可打印的模块列表
+
+    emPrintfCmdId_END
+}emPrintfCmdId;
+
 class HardCmd
 {
 public:
     //Board Data Format&&Parser
-    static QByteArray formatBoardCmd(emBoardCmdId cmdid, QByteArray cmdconetent);
+    static QByteArray formatBoardCmd(uint8_t cmdid, QByteArray cmdconetent);
+    static QByteArray formatPrintCmd(uint8_t cmdid, QByteArray cmdconetent);
     static bool parseBoardResponse(QByteArray &boardcmd, quint8 &cmdid, QByteArray &cmdconetent);
 };
 

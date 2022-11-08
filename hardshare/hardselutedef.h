@@ -1,7 +1,6 @@
 #ifndef __WK_HARD_SELUTE_DEFINE_H_
 #define __WK_HARD_SELUTE_DEFINE_H_
 
-
 // 二维码扫码D层任务执行结果定义
 typedef enum 
 {

@@ -70,6 +70,9 @@ private:
 
 public:
     QThread iapThread;
+    bool isSave;
+    QString saveFileName;
+    void saveData(QString &tempData);
 private:
     QTcpSocket *socket;
     bool net_status = false;
@@ -94,6 +97,14 @@ private slots:
     void on_btn_ztest_clicked();
 
     void on_btn_switch_clicked();
+
+    void on_btn_pOpen_clicked();
+
+    void on_btn_save_clicked();
+
+    void on_btn_clear_clicked();
+
+    void on_btn_pFresh_clicked();
 
 signals:
     void getXYZInfo();

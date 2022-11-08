@@ -2,6 +2,24 @@
 #define __HARD_DEF_H_
 
 #define NO_MOVE 0x7FFFFFFF
+#define PRINT_PORT 8889
+#define PC_PORT 8888
+
+// 打印对象bitmap
+typedef enum
+{
+    pActionThread_START 		= 0,
+    pActionThread_TCP 			= 0x00000001,
+    pActionThread_UsageCPU 	= 0x00000002,
+    pActionThread_X 			= 0x00000004,
+    pActionThread_Y 			= 0x00000008,
+    pActionThread_Z 			= 0x00000010,
+    pActionThread_SFScan 		= 0x00000020,
+    pActionThread_GripRole 	= 0x00000040,
+    pActionThread_YZmtData	= 0x00000080,
+    pActionThread_TEST		= 0x00000100,
+    pActionThread_End
+}emNetPrintfEnableBYTE;
 
 // 翻转装置，推杆动作位置枚举
 typedef enum 
