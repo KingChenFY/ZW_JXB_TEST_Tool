@@ -80,31 +80,37 @@ private:
     uint8_t axisSelect;
     uint8_t isTestRun;
 
+    //打印端口
+    QTcpSocket *socket_p;
+    bool net_status_p = false;
+
 private slots:
+    //测试socket
     void connected();
     void disconnected();
     void error();
     void readData();
+    //打印socket
+    void connected_p();
+    void disconnected_p();
+    void error_p();
+    void readData_p();
+    //测试slot
     void on_btn_net_clicked();
-
-    void on_btn_xtest_clicked();
-
     void getXYZInformaton();
     void setXYZMergetaskRun();
     void setXYZMergetaskStop();
+    void on_btn_xtest_clicked();
     void on_btn_ytest_clicked();
-
     void on_btn_ztest_clicked();
-
     void on_btn_switch_clicked();
-
-    void on_btn_pOpen_clicked();
-
-    void on_btn_save_clicked();
-
     void on_btn_clear_clicked();
-
+    //打印slot
+    void on_btn_net_p_clicked();
+    void on_btn_pOpen_clicked();
+    void on_btn_save_clicked();
     void on_btn_pFresh_clicked();
+    void on_btn_clear_2_clicked();
 
 signals:
     void getXYZInfo();

@@ -17,7 +17,7 @@ typedef enum
     pActionThread_SFScan 		= 0x00000020,
     pActionThread_GripRole 	= 0x00000040,
     pActionThread_YZmtData	= 0x00000080,
-    pActionThread_TEST		= 0x00000100,
+    pActionThread_Pos         = 0x00000100,
     pActionThread_End
 }emNetPrintfEnableBYTE;
 

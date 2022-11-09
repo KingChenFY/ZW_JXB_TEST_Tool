@@ -32,16 +32,29 @@ MainWindow::MainWindow(QWidget *parent)
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error()));
 #endif
 
+    //实例化Socket对象并绑定网络信号槽
+    socket_p = new QTcpSocket(this);
+    connect(socket_p, SIGNAL(connected()), this, SLOT(connected_p()));
+    connect(socket_p, SIGNAL(disconnected()), this, SLOT(disconnected_p()));
+    connect(socket_p, SIGNAL(readyRead()), this, SLOT(readData_p()));
+#if (QT_VERSION >= QT_VERSION_CHECK(6,0,0))
+    connect(socket_p, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(error_p()));
+#else
+    connect(socket_p, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error_p()));
+#endif
+
     //Ui配置
-    setFixedSize ( 1060, 460 );
-    setWindowTitle(QStringLiteral("智微Morphogo固件升级平台V1.0"));
+//    setFixedSize ( 920, 520 );
+    setWindowTitle(QStringLiteral("智微Morphogo测试平台V1.0"));
     ui->combo_ip->addItem("10.10.10.150");
     ui->combo_ip->addItem("171.16.100.225");
+    ui->combo_ip_p->addItem("10.10.10.150");
+    ui->combo_ip_p->addItem("171.16.100.225");
 //    QStringList printItem;
 //    printItem << "Print_List" << "Print_TCP" << "Print_UsageCPU"
 //              << "Print_X" << "Print_Y" << "Print_Z" << "Print_SFScan";
     ui->combo_port->addItem("8888");
-    ui->combo_port->addItem("8889");
+    ui->combo_port_p->addItem("8889");
 //    ui->combo_pSel->addItems(printItem);
     ui->statusBar->showMessage(QStringLiteral("就绪"), 1000);
 }
@@ -167,16 +180,6 @@ void MainWindow::readData()
             }    
         }
     }
-    else if(PRINT_PORT == socket->peerPort())
-    {
-        if(isSave)
-        {
-            QString saveString = QString(data);
-            saveData(saveString);
-        }
-        ui->textBrowser->insertPlainText(QString(data));
-        ui->textBrowser->moveCursor(QTextCursor::End);  //光标自动转到最后一行，设置内容滚动
-    }
     else
     {
         qDebug() << "board response parse Err";
@@ -285,7 +288,6 @@ void MainWindow::on_btn_ytest_clicked()
     axisSelect = 1;
 }
 
-
 void MainWindow::on_btn_ztest_clicked()
 {
 /* 请求：eTskType(U8 emTskDXYZType) + PosX(I32) + PosY(I32) + PosZ(I32) + Time(U32 ms)+ id(U16) + PosXStart(I32) + PosYStart(I32) + PosZStart(I32)*/
@@ -297,7 +299,6 @@ void MainWindow::on_btn_ztest_clicked()
     }
     axisSelect = 2;
 }
-
 
 void MainWindow::on_btn_switch_clicked()
 {
@@ -315,138 +316,7 @@ void MainWindow::on_btn_switch_clicked()
     }
 }
 
-void MainWindow::on_btn_pOpen_clicked()
-{
-/* 请求：EA 9D 00 0E A2 30 00 01 00 00 00 00 00 00 00 00 35 19 12 06 */
-/* 返回：*/
-    QByteArray pMsg;
-    uint8_t cmdid = emPrintfCmdId_SwitchPrintfAction;
-    uint8_t printItem = pActionThread_START;
-
-    if(ui->cb_net->checkState())
-        printItem |= pActionThread_TCP;
-    else
-        printItem &= ~pActionThread_TCP;
-
-    if(ui->cb_cpu->checkState())
-        printItem |= pActionThread_UsageCPU;
-    else
-        printItem &= ~pActionThread_UsageCPU;
-
-    if(ui->cb_x->checkState())
-        printItem |= pActionThread_X;
-    else
-        printItem &= ~pActionThread_X;
-
-    if(ui->cb_y->checkState())
-        printItem |= pActionThread_Y;
-    else
-        printItem &= ~pActionThread_Y;
-
-    if(ui->cb_z->checkState())
-        printItem |= pActionThread_Z;
-    else
-        printItem &= ~pActionThread_Z;
-
-    if(ui->cb_v->checkState())
-        printItem |= pActionThread_SFScan;
-    else
-        printItem &= ~pActionThread_SFScan;
-
-    if(ui->cb_r->checkState())
-        printItem |= pActionThread_GripRole;
-    else
-        printItem &= ~pActionThread_GripRole;
-
-    if(ui->cb_all->checkState())
-    {
-        printItem = 0xFFFFFFFF;
-        ui->cb_net->setCheckState(Qt::Checked);
-        ui->cb_cpu->setCheckState(Qt::Checked);
-        ui->cb_x->setCheckState(Qt::Checked);
-        ui->cb_y->setCheckState(Qt::Checked);
-        ui->cb_z->setCheckState(Qt::Checked);
-        ui->cb_v->setCheckState(Qt::Checked);
-        ui->cb_r->setCheckState(Qt::Checked);
-    }
-
-    if(ui->cb_list->checkState())
-    {
-        ui->cb_net->setCheckState(Qt::Unchecked);
-        ui->cb_cpu->setCheckState(Qt::Unchecked);
-        ui->cb_x->setCheckState(Qt::Unchecked);
-        ui->cb_y->setCheckState(Qt::Unchecked);
-        ui->cb_z->setCheckState(Qt::Unchecked);
-        ui->cb_v->setCheckState(Qt::Unchecked);
-        ui->cb_r->setCheckState(Qt::Unchecked);
-        ui->cb_all->setCheckState(Qt::Unchecked);
-        printItem  = 0;
-    }
-
-    pMsg.append( QUIHelperData::intToByte(printItem) );
-    socket->write(HardCmd::formatPrintCmd(cmdid, pMsg));
-}
-
-void MainWindow::saveData(QString &tempData)
-{
-//    QString tempData = ui->txtMain->toPlainText();
-//    if (tempData == "") {
-//        return;
-//    }
-    if (saveFileName.isEmpty()) {
-        return;
-    }
-//    QDateTime now = QDateTime::currentDateTime();
-//    QString name = now.toString("yyyy-MM-dd-HH-mm-ss");
-//    QString fileName = QString("%1/%2.txt").arg(ui->lineEdit_SaveDir->text()).arg(name);
-
-    QString fileName = saveFileName;
-    QStringList list = fileName.split(".");
-    QString filetype = list.at(list.count() - 1);
-
-    if(filetype == "txt")
-    {
-        QFile file(fileName);
-        file.open(QFile::WriteOnly | QIODevice::Text | QIODevice::Append);
-        QTextStream out(&file);
-        out << tempData << Qt::endl;
-        file.close();
-    }
-//    on_pushButton_ClearTxtMain_clicked();
-}
-
-void MainWindow::on_btn_save_clicked()
-{
-    if("保存打印" == ui->btn_save->text())
-    {
-        saveFileName = QFileDialog::getSaveFileName(this, "Save File","",tr("Excel files (*.xlsx);;Text files (*.txt)"));
-        if (!saveFileName.isEmpty())
-        {
-            ui->btn_save->setText("取消保存");
-            isSave = true;
-        }
-        else
-            isSave = false;
-    }
-    else
-    {
-        ui->btn_save->setText("保存打印");
-        isSave = false;
-    }
-}
-
 void MainWindow::on_btn_clear_clicked()
 {
     ui->textBrowser->clear();
 }
-
-void MainWindow::on_btn_pFresh_clicked()
-{
-    QByteArray pMsg;
-    uint8_t cmdid = emPrintfCmdId_RefreshPrint;
-    uint8_t printItem = pActionThread_START;
-
-    pMsg.append( QUIHelperData::intToByte(printItem) );
-    socket->write(HardCmd::formatPrintCmd(cmdid, pMsg));
-}
-

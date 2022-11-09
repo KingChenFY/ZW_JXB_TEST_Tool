@@ -15,7 +15,8 @@ CONFIG += resources_big
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    mainwindow_print.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -29,6 +30,10 @@ INCLUDEPATH += $$PWD/hardshare
 
 include ($$PWD/unit/unit.pri)
 include ($$PWD/hardshare/hardshare.pri)
+
+INCLUDEPATH += $$PWD/3rdparty/qtxlsx
+INCLUDEPATH += $$PWD/3rdparty/qcustomplot
+include ($$PWD/3rdparty/3rd_party.pri)
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
