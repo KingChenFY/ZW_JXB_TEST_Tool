@@ -383,7 +383,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QTabWidget" name="tabWidget_5">
+       <widget class="QTabWidget" name="tabWidget_Print">
         <property name="geometry">
          <rect>
           <x>200</x>

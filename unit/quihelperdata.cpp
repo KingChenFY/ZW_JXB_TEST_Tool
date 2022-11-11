@@ -19,6 +19,12 @@ int QUIHelperData::strBinToDecimal(const QString &strBin)
     return strBin.toInt(&ok, 2);
 }
 
+uint64_t QUIHelperData::strDecimalToU64(const QString &strBin)
+{
+    bool ok;
+    return strBin.toULongLong(&ok, 10);
+}
+
 QString QUIHelperData::strHexToStrBin(const QString &strHex)
 {
     uchar decimal = strHexToDecimal(strHex);

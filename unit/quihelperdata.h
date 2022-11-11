@@ -10,6 +10,8 @@ public:
     static int strHexToDecimal(const QString &strHex);
     //10进制字符串转10进制
     static int strDecimalToDecimal(const QString &strDecimal);
+    //10进制字符串转10进制64位
+    static uint64_t strDecimalToU64(const QString &strBin);
     //2进制字符串转10进制
     static int strBinToDecimal(const QString &strBin);
 

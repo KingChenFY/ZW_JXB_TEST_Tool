@@ -3,6 +3,9 @@
 
 #include "quihelperdata.h"
 
+#include <QRegularExpression>
+#include <QRegExp>
+
 void MainWindow::on_btn_net_p_clicked()
 {
     if (!socket_p){
@@ -51,6 +54,30 @@ void MainWindow::readData_p()
     }
     if(PRINT_PORT == socket_p->peerPort())
     {
+        int offset = 0;
+        QStringList sl_Pos;
+        //F[AppTaskXYZPos] L[754]: ##PPOS,X,0,Y,-10271,Z,-9,T745572578##
+        QRegularExpression rx("##PPOS,X,(.*?),Y,(.*?),Z,(.*?),T(.*?)##");
+        do {
+            QRegularExpressionMatch match = rx.match(QString(data), offset);
+            if(!match.hasMatch())
+                break;
+
+            for(uint8_t i=1; i<5; i++)
+            {
+                sl_Pos<<match.captured(i);
+            }
+            offset = match.capturedEnd(4)+2;
+            xyzTPos.x = QUIHelperData::strDecimalToDecimal(sl_Pos.at(0));
+            xyzTPos.y = QUIHelperData::strDecimalToDecimal(sl_Pos.at(1));
+            xyzTPos.z = QUIHelperData::strDecimalToDecimal(sl_Pos.at(2));
+            xyzTPos.tick = QUIHelperData::strDecimalToU64(sl_Pos.at(3));
+            if(frmXyz->isPaint)
+                frmXyz->drawDataPoint(xyzTPos);
+        }while(1);
+
+
+
         if(isSave)
         {
             QString saveString = QString(data);

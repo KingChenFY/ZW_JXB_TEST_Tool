@@ -9,53 +9,13 @@
 #include <QThread>
 
 #include "head.h"
+#include "frmxyztrack.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 #define ZW_PACKET_MAX_BYTES 992
-
-typedef struct
-{
-    int32_t x;
-    int32_t y;
-    int32_t z;
-}ST_POS;
-
-typedef struct
-{
-    int32_t xMin;
-    int32_t xMax;
-    int32_t yMin;
-    int32_t yMax;
-    int32_t zMin;
-    int32_t zMax;
-}ST_BORDER_POS;
-
-typedef struct
-{
-    uint8_t x;
-    uint8_t y;
-    uint8_t z;
-}ST_IS_MOVE;
-
-typedef struct
-{
-    emTskDXYZType taskType;
-    emWorkStatus taskStatus;
-    emSeluteDMoveXYZ taskSelute;
-    ST_POS aimPos;
-    uint32_t useTime;
-    ST_POS curPos;
-    uint64_t rdTick;
-    ST_BORDER_POS xyzBorder;
-    ST_IS_MOVE isMove;
-    uint16_t pointID;
-    uint8_t yInOut;
-    uint8_t zUpDown;
-    ST_POS startPos;
-}ST_XYZ_INFO;
 
 class MainWindow : public QMainWindow
 {
@@ -73,6 +33,11 @@ public:
     bool isSave;
     QString saveFileName;
     void saveData(QString &tempData);
+    frmXyzTrack *frmXyz;
+
+    //打印轨迹用到数据
+    ST_POS_T xyzTPos;
+
 private:
     QTcpSocket *socket;
     bool net_status = false;

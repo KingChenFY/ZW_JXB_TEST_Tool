@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    frmXyz = new frmXyzTrack;
+    ui->tabWidget_Print->addTab(frmXyz, "轨迹曲线");
+
     connect(this, SIGNAL(getXYZInfo()), this, SLOT(getXYZInformaton()));
     connect(this, SIGNAL(setXYZRun()), this, SLOT(setXYZMergetaskRun()));
     connect(this, SIGNAL(setXYZStop()), this, SLOT(setXYZMergetaskStop()));

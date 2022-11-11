@@ -1,6 +1,8 @@
 #ifndef __HARD_DEF_H_
 #define __HARD_DEF_H_
 
+#include <QObject>
+
 #define NO_MOVE 0x7FFFFFFF
 #define PRINT_PORT 8889
 #define PC_PORT 8888
