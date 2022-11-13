@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include "quihelperdata.h"
-
+#include "quihelper.h"
 #include <QRegularExpression>
 #include <QRegExp>
 
@@ -68,23 +68,26 @@ void MainWindow::readData_p()
                 sl_Pos<<match.captured(i);
             }
             offset = match.capturedEnd(4)+2;
-            xyzTPos.x = QUIHelperData::strDecimalToDecimal(sl_Pos.at(0));
-            xyzTPos.y = QUIHelperData::strDecimalToDecimal(sl_Pos.at(1));
-            xyzTPos.z = QUIHelperData::strDecimalToDecimal(sl_Pos.at(2));
-            xyzTPos.tick = QUIHelperData::strDecimalToU64(sl_Pos.at(3));
+//            xyzTPos.x = QUIHelperData::strDecimalToDecimal(sl_Pos.at(0));
+//            xyzTPos.y = QUIHelperData::strDecimalToDecimal(sl_Pos.at(1));
+//            xyzTPos.z = QUIHelperData::strDecimalToDecimal(sl_Pos.at(2));
+//            xyzTPos.tick = QUIHelperData::strDecimalToU64(sl_Pos.at(3));
+
             if(frmXyz->isPaint)
+            {
+                xyzTPos.tick++;//= QUIHelper::getRandValue();
+                xyzTPos.x = QUIHelper::getRandValue(-10000, 23894729, true, true);
                 frmXyz->drawDataPoint(xyzTPos);
+            }
         }while(1);
-
-
 
         if(isSave)
         {
             QString saveString = QString(data);
             saveData(saveString);
         }
-        ui->textBrowser_p->insertPlainText(QString(data));
-        ui->textBrowser_p->moveCursor(QTextCursor::End);  //光标自动转到最后一行，设置内容滚动
+//        ui->textBrowser_p->insertPlainText(QString(data));
+//        ui->textBrowser_p->moveCursor(QTextCursor::End);  //光标自动转到最后一行，设置内容滚动
     }
     else
     {

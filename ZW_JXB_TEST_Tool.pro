@@ -15,17 +15,22 @@ CONFIG += resources_big
 
 SOURCES += \
     frmxyztrack.cpp \
+#    frmqwtplot.cpp \
     main.cpp \
     mainwindow.cpp \
-    mainwindow_print.cpp
+    mainwindow_print.cpp \
+    threadpaint.cpp
 
 HEADERS += \
     frmxyztrack.h \
+#    frmqwtplot.h \
     mainwindow.h \
-    head.h
+    head.h \
+    threadpaint.h
 
 FORMS += \
     frmxyztrack.ui \
+#    frmqwtplot.ui \
     mainwindow.ui
 
 INCLUDEPATH += $$PWD/unit
@@ -34,7 +39,7 @@ INCLUDEPATH += $$PWD/hardshare
 include ($$PWD/unit/unit.pri)
 include ($$PWD/hardshare/hardshare.pri)
 
-INCLUDEPATH += $$PWD/3rdparty/qtxlsx
+#INCLUDEPATH += $$PWD/3rdparty/qtxlsx
 INCLUDEPATH += $$PWD/3rdparty/qcustomplot
 include ($$PWD/3rdparty/3rd_party.pri)
 
@@ -47,3 +52,10 @@ RC_ICONS = title.ico
 
 RESOURCES += \
     res.qrc
+
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/3rdparty/qwt/lib/ -lqwt
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/3rdparty/qwt/lib/ -lqwtd
+#else:unix: LIBS += -L$$PWD/3rdparty/qwt/lib/ -lqwt
+
+#INCLUDEPATH += $$PWD/3rdparty/qwt/inc
+#DEPENDPATH += $$PWD/3rdparty/qwt/inc

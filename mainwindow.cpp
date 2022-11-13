@@ -17,8 +17,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    xyzTPos.tick = 120;
+    xyzTPos.x = 0;
+    netRevCnt = 0;
+
     frmXyz = new frmXyzTrack;
     ui->tabWidget_Print->addTab(frmXyz, "轨迹曲线");
+//    frmXyz = new frmqwtplot;
+//    ui->tabWidget_Print->addTab(frmXyz, "轨迹曲线");
 
     connect(this, SIGNAL(getXYZInfo()), this, SLOT(getXYZInformaton()));
     connect(this, SIGNAL(setXYZRun()), this, SLOT(setXYZMergetaskRun()));
@@ -53,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->combo_ip->addItem("171.16.100.225");
     ui->combo_ip_p->addItem("10.10.10.150");
     ui->combo_ip_p->addItem("171.16.100.225");
+    ui->combo_ip_p->addItem("192.168.182.1");
 //    QStringList printItem;
 //    printItem << "Print_List" << "Print_TCP" << "Print_UsageCPU"
 //              << "Print_X" << "Print_Y" << "Print_Z" << "Print_SFScan";
@@ -109,6 +116,8 @@ void MainWindow::error()
 
 void MainWindow::readData()
 {
+    netRevCnt++;
+    qDebug() << netRevCnt << Qt::endl;
     QByteArray data = socket->readAll();
     if (data.length() <= 0) {
         return;

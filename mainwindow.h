@@ -10,6 +10,7 @@
 
 #include "head.h"
 #include "frmxyztrack.h"
+//#include "frmqwtplot.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,6 +35,7 @@ public:
     QString saveFileName;
     void saveData(QString &tempData);
     frmXyzTrack *frmXyz;
+//    frmqwtplot *frmXyz;
 
     //打印轨迹用到数据
     ST_POS_T xyzTPos;
@@ -48,6 +50,7 @@ private:
     //打印端口
     QTcpSocket *socket_p;
     bool net_status_p = false;
+    int netRevCnt;
 
 private slots:
     //测试socket
