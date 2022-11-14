@@ -67,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->combo_port_p->addItem("8889");
 //    ui->combo_pSel->addItems(printItem);
     ui->statusBar->showMessage(QStringLiteral("就绪"), 1000);
+    ui->textBrowser_p->document()->setMaximumBlockCount(100);
 }
 
 MainWindow::~MainWindow()
@@ -117,7 +118,7 @@ void MainWindow::error()
 void MainWindow::readData()
 {
     netRevCnt++;
-    qDebug() << netRevCnt << Qt::endl;
+//    qDebug() << netRevCnt << Qt::endl;
     QByteArray data = socket->readAll();
     if (data.length() <= 0) {
         return;

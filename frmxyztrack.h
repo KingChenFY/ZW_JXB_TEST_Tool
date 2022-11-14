@@ -25,7 +25,6 @@ public:
     ~frmXyzTrack();
 
     void drawDataPoint(const ST_POS_T &m_xyzCurPos);
-    void clearData();
 
     bool isPaint;
     int paintDataMax;

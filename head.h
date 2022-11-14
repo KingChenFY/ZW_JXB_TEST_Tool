@@ -34,7 +34,7 @@ typedef struct
     int32_t x;
     int32_t y;
     int32_t z;
-    uint64_t tick;
+   volatile uint64_t tick;
 }ST_POS_T;
 
 typedef struct

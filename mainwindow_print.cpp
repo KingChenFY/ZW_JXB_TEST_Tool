@@ -56,6 +56,7 @@ void MainWindow::readData_p()
     {
         int offset = 0;
         QStringList sl_Pos;
+        int index = 0;
         //F[AppTaskXYZPos] L[754]: ##PPOS,X,0,Y,-10271,Z,-9,T745572578##
         QRegularExpression rx("##PPOS,X,(.*?),Y,(.*?),Z,(.*?),T(.*?)##");
         do {
@@ -68,15 +69,15 @@ void MainWindow::readData_p()
                 sl_Pos<<match.captured(i);
             }
             offset = match.capturedEnd(4)+2;
-//            xyzTPos.x = QUIHelperData::strDecimalToDecimal(sl_Pos.at(0));
-//            xyzTPos.y = QUIHelperData::strDecimalToDecimal(sl_Pos.at(1));
-//            xyzTPos.z = QUIHelperData::strDecimalToDecimal(sl_Pos.at(2));
-//            xyzTPos.tick = QUIHelperData::strDecimalToU64(sl_Pos.at(3));
+            xyzTPos.x = QUIHelperData::strDecimalToDecimal(sl_Pos.at(index++));
+            xyzTPos.y = QUIHelperData::strDecimalToDecimal(sl_Pos.at(index++));
+            xyzTPos.z = QUIHelperData::strDecimalToDecimal(sl_Pos.at(index++));
+            xyzTPos.tick = QUIHelperData::strDecimalToU64(sl_Pos.at(index++));
 
             if(frmXyz->isPaint)
             {
-                xyzTPos.tick++;//= QUIHelper::getRandValue();
-                xyzTPos.x = QUIHelper::getRandValue(-10000, 23894729, true, true);
+//                xyzTPos.tick++;//= QUIHelper::getRandValue();
+//                xyzTPos.x = QUIHelper::getRandValue(-10000, 23894729, true, true);
                 frmXyz->drawDataPoint(xyzTPos);
             }
         }while(1);
@@ -86,8 +87,8 @@ void MainWindow::readData_p()
             QString saveString = QString(data);
             saveData(saveString);
         }
-//        ui->textBrowser_p->insertPlainText(QString(data));
-//        ui->textBrowser_p->moveCursor(QTextCursor::End);  //光标自动转到最后一行，设置内容滚动
+        ui->textBrowser_p->insertPlainText(QString(data));
+        ui->textBrowser_p->moveCursor(QTextCursor::End);  //光标自动转到最后一行，设置内容滚动
     }
     else
     {
