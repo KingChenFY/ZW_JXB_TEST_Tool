@@ -96,6 +96,35 @@ void MainWindow::readData_p()
     }
 }
 
+
+
+void MainWindow::on_cb_AllSel_clicked(bool checked)
+{
+    if(checked)
+    {
+        ui->cb_net->setChecked(true);
+        ui->cb_cpu->setChecked(true);
+        ui->cb_p->setChecked(true);
+        ui->cb_x->setChecked(true);
+        ui->cb_y->setChecked(true);
+        ui->cb_z->setChecked(true);
+        ui->cb_v->setChecked(true);
+        ui->cb_r->setChecked(true);
+    }
+    else
+    {
+        ui->cb_net->setChecked(false);
+        ui->cb_cpu->setChecked(false);
+        ui->cb_p->setChecked(false);
+        ui->cb_x->setChecked(false);
+        ui->cb_y->setChecked(false);
+        ui->cb_z->setChecked(false);
+        ui->cb_v->setChecked(false);
+        ui->cb_r->setChecked(false);
+    }
+}
+
+
 void MainWindow::on_btn_pOpen_clicked()
 {
 /* 请求：EA 9D 00 0E A2 30 00 01 00 00 00 00 00 00 00 00 35 19 12 06 */
@@ -144,32 +173,42 @@ void MainWindow::on_btn_pOpen_clicked()
     else
         printItem &= ~pActionThread_GripRole;
 
-    if(ui->cb_all->checkState())
-    {
-        printItem = 0xFFFFFFFF;
-        ui->cb_net->setCheckState(Qt::Checked);
-        ui->cb_cpu->setCheckState(Qt::Checked);
-        ui->cb_x->setCheckState(Qt::Checked);
-        ui->cb_y->setCheckState(Qt::Checked);
-        ui->cb_z->setCheckState(Qt::Checked);
-        ui->cb_v->setCheckState(Qt::Checked);
-        ui->cb_r->setCheckState(Qt::Checked);
-        ui->cb_p->setCheckState(Qt::Checked);
-    }
+    pMsg.append( QUIHelperData::intToByte(printItem) );
+    socket_p->write(HardCmd::formatPrintCmd(cmdid, pMsg));
+}
 
-    if(ui->cb_list->checkState())
-    {
-        ui->cb_net->setCheckState(Qt::Unchecked);
-        ui->cb_cpu->setCheckState(Qt::Unchecked);
-        ui->cb_x->setCheckState(Qt::Unchecked);
-        ui->cb_y->setCheckState(Qt::Unchecked);
-        ui->cb_z->setCheckState(Qt::Unchecked);
-        ui->cb_v->setCheckState(Qt::Unchecked);
-        ui->cb_r->setCheckState(Qt::Unchecked);
-        ui->cb_all->setCheckState(Qt::Unchecked);
-        ui->cb_p->setCheckState(Qt::Unchecked);
-        printItem  = 0;
-    }
+void MainWindow::on_btn_pOpen_2_clicked()
+{
+/* 请求：EA 9D 00 0E A2 30 00 01 00 00 00 00 00 00 00 00 35 19 12 06 */
+/* 返回：*/
+    QByteArray pMsg;
+    uint8_t cmdid = emPrintfCmdId_SelectMCU2;
+    uint32_t printItem = MCU2_PRINT_START;
+
+    if(ui->rb_BI->isChecked())
+        printItem |= MCU2_PRINT_BI;
+    else
+        printItem &= ~MCU2_PRINT_BI;
+
+    if(ui->rb_BO->isChecked())
+        printItem |= MCU2_PRINT_BO;
+    else
+        printItem &= ~MCU2_PRINT_BO;
+
+    if(ui->rb_PI->isChecked())
+        printItem |= MCU2_PRINT_PI;
+    else
+        printItem &= ~MCU2_PRINT_PI;
+
+    if(ui->rb_PO->isChecked())
+        printItem |= MCU2_PRINT_PO;
+    else
+        printItem &= ~MCU2_PRINT_PO;
+
+    if(ui->rb_HR->isChecked())
+        printItem |= MCU2_PRINT_HR;
+    else
+        printItem &= ~MCU2_PRINT_HR;
 
     pMsg.append( QUIHelperData::intToByte(printItem) );
     socket_p->write(HardCmd::formatPrintCmd(cmdid, pMsg));

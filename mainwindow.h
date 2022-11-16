@@ -79,6 +79,8 @@ private slots:
     void on_btn_save_clicked();
     void on_btn_pFresh_clicked();
     void on_btn_clear_2_clicked();
+    void on_btn_pOpen_2_clicked();
+    void on_cb_AllSel_clicked(bool checked);
 
 signals:
     void getXYZInfo();

@@ -336,7 +336,9 @@ typedef enum
 
     /* 请求： */
     /* 返回： */
-    emPrintfCmdId_RefreshPrint = 2,//查询可打印的模块列表
+    emPrintfCmdId_RefreshPrint = 2,//刷新打印
+
+    emPrintfCmdId_SelectMCU2 = 3,//切换板二打印模块
 
     emPrintfCmdId_END
 }emPrintfCmdId;

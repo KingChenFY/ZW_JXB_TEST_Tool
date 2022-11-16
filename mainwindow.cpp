@@ -333,3 +333,6 @@ void MainWindow::on_btn_clear_clicked()
 {
     ui->textBrowser->clear();
 }
+
+
+

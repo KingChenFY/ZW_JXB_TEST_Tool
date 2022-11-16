@@ -10,6 +10,19 @@
 // 打印对象bitmap
 typedef enum
 {
+    MCU2_PRINT_START 		= 0,
+    MCU2_PRINT_BI 			= 0x00000001,
+    MCU2_PRINT_BO 			= 0x00000002,
+    MCU2_PRINT_PI 			= 0x00000004,
+    MCU2_PRINT_PO 			= 0x00000008,
+    MCU2_PRINT_HR 			= 0x00000010,
+    MCU2_PRINT_Grip 		= 0x00000020,
+    MCU2_PRINT_End
+}emMCU2EnableBYTE;
+
+// 打印对象bitmap
+typedef enum
+{
     pActionThread_START 		= 0,
     pActionThread_TCP 			= 0x00000001,
     pActionThread_UsageCPU 	= 0x00000002,
